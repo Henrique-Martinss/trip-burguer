@@ -592,7 +592,7 @@ body {
     display: flex;
     gap: 1rem;
     background: #141414;
-    border: 1px solid rgba(201, 168, 76, 0.1);
+    border: 1px solid #a018ee4d;
     border-radius: 8px;
     padding: 1.25rem;
 }
@@ -619,7 +619,7 @@ body {
 
 .localizacao-map {
     background: #141414;
-    border: 1px solid rgba(201, 168, 76, 0.15);
+    border: 1px solid #a018ee4d;
     border-radius: 8px;
     overflow: hidden;
     aspect-ratio: 4 / 3;
@@ -628,17 +628,6 @@ body {
     justify-content: center;
     flex-direction: column;
     gap: 1rem;
-}
-
-.map-icon {
-    font-size: 3rem;
-}
-
-.map-text {
-    font-family: 'Oswald', sans-serif;
-    color: #888;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
 }
 
 @media (max-width: 768px) {
@@ -650,7 +639,7 @@ body {
 /* ========== FOOTER ========== */
 .footer {
     background: #050505;
-    border-top: 1px solid rgba(201, 168, 76, 0.15);
+    border-top: 1px solid #a018ee4d;
     padding: 3rem 1.5rem;
 }
 
@@ -690,7 +679,7 @@ body {
 }
 
 .footer-links a:hover {
-    color: #C9A84C;
+    color: #a018ee4d;
 }
 
 .footer-social {
@@ -742,8 +731,20 @@ body {
 .footer-text {
     font-family: 'Inter', sans-serif;
     color: #555;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
+
+.criador {
+    font-family: 'Inter', sans-serif;
+    color: #555;
+    font-size: 1rem;
+}
+
+.criador-link {
+    text-decoration: none;
+    color: rgb(241, 129, 0)
+}
+
 
 /* ========== WHATSAPP FLOATING BUTTON ========== */
 .whatsapp-float {

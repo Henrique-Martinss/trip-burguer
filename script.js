@@ -114,7 +114,7 @@ document.querySelectorAll('.social-btn').forEach(btn => {
 // ========== HOVER EFFECTS NOS LINKS DE NAVEGAÇÃO ==========
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('mouseenter', function() {
-        this.style.color = '#C9A84C';
+        this.style.color = '#8C2493';
     });
     
     link.addEventListener('mouseleave', function() {
@@ -125,7 +125,7 @@ document.querySelectorAll('.nav-link').forEach(link => {
 // ========== HOVER EFFECTS NOS FOOTER LINKS ==========
 document.querySelectorAll('.footer-links a').forEach(link => {
     link.addEventListener('mouseenter', function() {
-        this.style.color = '#C9A84C';
+        this.style.color = '#8C2493';
     });
     
     link.addEventListener('mouseleave', function() {
@@ -160,11 +160,11 @@ document.querySelectorAll('.burger-image img').forEach(img => {
 // ========== HOVER EFFECTS NOS INFO CARDS ==========
 document.querySelectorAll('.info-card').forEach(card => {
     card.addEventListener('mouseenter', function() {
-        this.style.borderColor = 'rgba(201, 168, 76, 0.35)';
+        this.style.borderColor = '#a018ee4d';
     });
     
     card.addEventListener('mouseleave', function() {
-        this.style.borderColor = 'rgba(201, 168, 76, 0.1)';
+        this.style.borderColor = '#753b964d';
     });
 });
 
