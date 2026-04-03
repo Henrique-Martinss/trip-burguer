@@ -418,7 +418,7 @@ body {
 
 .burger-card {
     background: #141414;
-    border: 1px solid rgba(201, 168, 76, 0.15);
+    border: 1px solid #4f2f52;
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.35s ease;
@@ -426,7 +426,7 @@ body {
 
 .burger-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(201, 168, 76, 0.5);
+    border-color: #8C2493;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 168, 76, 0.1);
 }
 
