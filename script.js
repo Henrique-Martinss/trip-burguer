@@ -103,6 +103,10 @@ let _pendingItem       = null; // item aguardando confirmação de adicionais
 let _adicionaisSelecionados = []; // [ {nome, preco, qty} ]
 let _valorSaladaGlobal = 0;
 
+// ========== HORÁRIO DE FUNCIONAMENTO ==========
+let _horarioStatus = { aberturaManual: null };
+let _unsubscribeHorario = null;
+
 const carrinhoDrawer  = document.getElementById('carrinhoDrawer');
 const carrinhoOverlay = document.getElementById('carrinhoOverlay');
 const carrinhoVazio   = document.getElementById('carrinhoVazio');
@@ -423,6 +427,14 @@ function TB_onChangePagamento() {
 }
 
 async function enviarParaWhatsApp() {
+    // ========== VERIFICAR HORÁRIO ==========
+    const statusAberto = TB_verificarSeAberto(_horarioStatus);
+    if (!statusAberto.aberto) {
+        fecharModalDireto();
+        mostrarToast(`❌ ${statusAberto.motivo}\n⏰ Próximo horário: ${obterProximoHorarioAbertura()}`);
+        return;
+    }
+
     const camposObrig = [
         { el: inputRua,    nome: 'rua / avenida' },
         { el: inputNumero, nome: 'número' },
@@ -628,6 +640,12 @@ function confirmarPixEEnviar() {
 function initApp() {
     TB_initDB();
 
+    // Listener de horário
+    _unsubscribeHorario = TB_listenHorarioStatus(status => {
+        _horarioStatus = status;
+        atualizarIndicadorHorario();
+    });
+
     const grids = [
         { id: 'hamburgueresGrid', cat: 'hamburgueres' },
         { id: 'xisGrid',         cat: 'xis' },
@@ -668,9 +686,51 @@ function initApp() {
             }
         });
     }
+
+    // Atualizar indicador de horário a cada minuto
+    setInterval(atualizarIndicadorHorario, 60000);
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
+
+/**
+ * Atualizar indicador visual de horário no navbar
+ */
+function atualizarIndicadorHorario() {
+    const statusAberto = TB_verificarSeAberto(_horarioStatus);
+    
+    // Criar ou atualizar o indicador
+    let indicador = document.getElementById('indicadorHorario');
+    
+    if (!indicador) {
+        indicador = document.createElement('div');
+        indicador.id = 'indicadorHorario';
+        indicador.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${statusAberto.aberto ? '#4caf50' : '#CC2200'};
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        `;
+        document.body.appendChild(indicador);
+    }
+    
+    const icon = statusAberto.aberto ? '🟢 Aberto' : '🔴 Fechado';
+    indicador.innerHTML = icon;
+    indicador.style.background = statusAberto.aberto ? '#4caf50' : '#CC2200';
+}
 
 console.log('✓ Trip Burger - Landing Page carregada com sucesso!');
 console.log('✓ Carrinho, produtos dinâmicos e animações ativos.');

@@ -450,7 +450,7 @@
             <div class="modal-body" style="text-align: center; color: white;">
                 <div id="pixLoading" style="display: flex; flex-direction: column; align-items: center; padding: 30px 0;">
                     <div class="spinner" style="border: 4px solid rgba(255,255,255,0.1); border-left-color: var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px;"></div>
-                    <p style="font-family: 'Inter', sans-serif;">Gerando código PIX seguro...</p>
+                    <p id="pixLoadingMsg" style="font-family: 'Inter', sans-serif; text-align: center; padding: 0 10px;">Gerando código PIX seguro...</p>
                 </div>
                 <div id="pixContainer" style="display: none;">
                     <img id="pixQRCode" src="" alt="QR Code PIX" style="width: 220px; height: 220px; border-radius: 8px; margin: 10px auto; border: 4px solid white;">
@@ -459,6 +459,11 @@
                         <p style="font-size: 0.85rem; margin-bottom: 5px; color: #bbb; font-family: 'Inter', sans-serif;">Ou use o Copia e Cola:</p>
                         <input type="text" id="inputCopiaCola" class="form-input" style="text-align: center; font-size: 0.8rem; background: rgba(0,0,0,0.5); margin-bottom: 10px; color: #fff;" readonly>
                         <button class="btn-outline-gold" id="btnCopiarPix" onclick="copiarPix()" style="width: 100%; padding: 10px; font-size: 0.9rem;">📄 Copiar Código Pix</button>
+                    </div>
+
+                    <div id="pixStatusRow" style="margin-top: 15px; padding: 12px 15px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px;">
+                        <div class="pix-status-spinner" style="border: 3px solid rgba(255,255,255,0.1); border-left-color: var(--gold); border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; flex-shrink: 0;"></div>
+                        <span id="pixStatusText" style="font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #ccc;">Aguardando pagamento...</span>
                     </div>
                 </div>
             </div>
@@ -482,6 +487,7 @@
 
     <!-- Data layer + render compartilhado -->
     <script src="js/db.js"></script>
+    <script src="js/horarios.js"></script>
     <script src="js/render.js"></script>
     <script src="script.js?v=2"></script>
 </body>

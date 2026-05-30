@@ -64,6 +64,10 @@
           <span class="sidebar-icon">⭐</span>
           <span>Avaliações</span>
         </button>
+        <button class="sidebar-btn" id="sidebarBtnConfig" onclick="adminNavegar('config')">
+          <span class="sidebar-icon">⚙️</span>
+          <span>Configurações</span>
+        </button>
       </nav>
 
       <div class="sidebar-footer">
@@ -221,6 +225,49 @@
         </div>
       </div>
 
+      <!-- ===== ABA: CONFIGURAÇÕES ===== -->
+      <div id="panelConfig" class="admin-panel-section" style="display:none;">
+        <div class="admin-toolbar" style="margin-bottom: 2rem;">
+          <div>
+            <h2 class="admin-section-title">⚙️ Configurações do Site</h2>
+            <p class="pedidos-sub" style="margin-top: 5px;">Gerencie horários e outras configurações</p>
+          </div>
+        </div>
+
+        <!-- ===== CONTROLE DE HORÁRIOS ===== -->
+        <div class="config-card" style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 10px; background: #0d0d0d; margin-bottom: 2rem;">
+          <h3 style="color: #fff; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">🕐 Controle de Horários</h3>
+          
+          <div style="background: #141414; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid var(--purple);">
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 0.5rem;">Status atual:</p>
+            <div id="statusHorarioDiv" style="color: #fff; font-weight: bold; font-size: 1.1rem;">
+              🔄 Carregando...
+            </div>
+          </div>
+
+          <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 1rem;">
+            <strong>Horários automáticos:</strong><br>
+            <small style="display: block; margin-top: 0.5rem;">
+              <strong>Seg-Qui e Dom:</strong> 11h-14h | 18h30-23h30<br>
+              <strong>Sexta:</strong> 11h-14h | 20h-04h<br>
+              <strong>Sábado:</strong> 20h-04h (fechado ao meio-dia)<br>
+            </small>
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button class="btn-admin-action" style="background: #4caf50; color: #fff; border: none; padding: 0.8rem 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 8px; cursor: pointer; flex: 1;" id="btnAbrirManualmente" onclick="adminAbrirManualmente()">
+              🟢 Abrir Manualmente
+            </button>
+            <button class="btn-admin-action" style="background: #CC2200; color: #fff; border: none; padding: 0.8rem 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 8px; cursor: pointer; flex: 1;" id="btnFecharManualmente" onclick="adminFecharManualmente()">
+              🔴 Fechar Manualmente
+            </button>
+            <button class="btn-admin-action" style="background: #666; color: #fff; border: none; padding: 0.8rem 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 8px; cursor: pointer; flex: 1;" id="btnAuto" onclick="adminRestaurarAuto()">
+              ⚙️ Modo Automático
+            </button>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -371,6 +418,7 @@
 
   <script src="admin-init.js"></script>
   <script src="../js/db.js"></script>
+  <script src="../js/horarios.js"></script>
   <script src="../js/render.js"></script>
   <script src="admin.js"></script>
 </body>

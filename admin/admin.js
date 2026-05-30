@@ -9,7 +9,9 @@ let unsubscribeProdutos = null;
 let unsubscribeStats   = null;
 let unsubscribePedidos  = null;
 let unsubscribeAvaliacoes = null;
-let _secaoAtual = 'produtos'; // 'produtos' | 'pedidos' | 'avaliacoes'
+let unsubscribeHorarios = null;
+let _secaoAtual = 'produtos'; // 'produtos' | 'pedidos' | 'avaliacoes' | 'config'
+let _horarioStatusAdmin = { aberturaManual: null };
 
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
@@ -132,10 +134,12 @@ function adminNavegar(secao) {
   document.getElementById('sidebarBtnProdutos').classList.toggle('active', secao === 'produtos');
   document.getElementById('sidebarBtnPedidos').classList.toggle('active', secao === 'pedidos');
   document.getElementById('sidebarBtnAvaliacoes').classList.toggle('active', secao === 'avaliacoes');
+  document.getElementById('sidebarBtnConfig').classList.toggle('active', secao === 'config');
 
   document.getElementById('panelProdutos').style.display = secao === 'produtos' ? '' : 'none';
   document.getElementById('panelPedidos').style.display  = secao === 'pedidos'  ? '' : 'none';
   document.getElementById('panelAvaliacoes').style.display = secao === 'avaliacoes' ? '' : 'none';
+  document.getElementById('panelConfig').style.display = secao === 'config' ? '' : 'none';
 
   if (secao === 'produtos' && !unsubscribeProdutos) {
     carregarAba(adminCatAtual);
@@ -143,6 +147,10 @@ function adminNavegar(secao) {
   
   if (secao === 'avaliacoes' && !unsubscribeAvaliacoes) {
     adminInitAvaliacoes();
+  }
+
+  if (secao === 'config') {
+    adminInitConfig();
   }
 }
 

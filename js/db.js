@@ -240,6 +240,61 @@ async function TB_saveConfig(config) {
 }
 
 // ============================================================
+// HORÁRIO DE FUNCIONAMENTO — FIRESTORE
+// ============================================================
+
+async function TB_getHorarioStatus() {
+  try {
+    const snap = await firestoreDB.collection(TB_COLLECTION_CONFIG).doc('horarios').get();
+    return snap.exists ? snap.data() : { aberturaManual: null };
+  } catch (e) {
+    console.error('❌ TB_getHorarioStatus erro:', e);
+    return { aberturaManual: null };
+  }
+}
+
+function TB_listenHorarioStatus(callback) {
+  return firestoreDB.collection(TB_COLLECTION_CONFIG).doc('horarios')
+    .onSnapshot(snap => {
+      const status = snap.exists ? snap.data() : { aberturaManual: null };
+      callback(status);
+    }, error => {
+      console.error('❌ TB_listenHorarioStatus erro:', error);
+      callback({ aberturaManual: null });
+    });
+}
+
+async function TB_saveHorarioStatus(status) {
+  try {
+    await firestoreDB.collection(TB_COLLECTION_CONFIG).doc('horarios').set(status, { merge: true });
+    console.log('✓ Status de horário salvo');
+  } catch (e) {
+    console.error('❌ TB_saveHorarioStatus erro:', e);
+    throw e;
+  }
+}
+
+/**
+ * Verifica se a loja está aberta (considerando horário automático e controle manual)
+ * @param {Object} statusManual - Status do controle manual (se houver)
+ * @returns {Object} { aberto: boolean, motivo: string }
+ */
+function TB_verificarSeAberto(statusManual = null) {
+  // Se está fechado manualmente, retorna false
+  if (statusManual && statusManual.aberturaManual === false) {
+    return { aberto: false, motivo: 'Loja fechada manualmente' };
+  }
+
+  // Se está aberto manualmente, retorna true
+  if (statusManual && statusManual.aberturaManual === true) {
+    return { aberto: true, motivo: 'Loja aberta manualmente' };
+  }
+
+  // Caso contrário, verifica o horário automático
+  return verificarSeAberto();
+}
+
+// ============================================================
 // AVALIAÇÕES — FIRESTORE
 // ============================================================
 
