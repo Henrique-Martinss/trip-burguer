@@ -561,7 +561,7 @@ function abrirModalPix(pedidoObj, mensagemBase) {
     btn.style.cursor = 'not-allowed';
 
     // Requisição para o nosso Backend Node.js
-    const BACKEND_URL = 'http://localhost:3000'; // Em produção, mudar para a URL real
+    const BACKEND_URL = 'https://trip-burguer.onrender.com';
     
     fetch(`${BACKEND_URL}/api/pix/create`, {
         method: 'POST',
