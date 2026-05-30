@@ -1,0 +1,9 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (NUNCA enviar para o Git!)
+.env
+
+# Temporários
+.tmp/
+*.log
