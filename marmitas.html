@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marmitas — Trip Burger</title>
+    <meta name="description" content="Marmitas artesanais Trip Burger. Sabor de hamburguer no conforto da sua marmita. Porções generosas com ingredientes frescos.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="icon" type="image/png" href="img/trip.jpeg">
+</head>
+
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo">
+                <img src="img/trip.jpeg" alt="logo-trip" class="logo-image">
+                <div class="logo-text">TRIP<br>BURGER</div>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html#cardapio" class="nav-link">Hambúrgueres</a>
+                <a href="index.html#bebidas" class="nav-link">Bebidas</a>
+                <a href="index.html#localizacao" class="nav-link">Localização</a>
+                <button class="btn-carrinho-nav" id="btnCarrinhoNav" aria-label="Abrir carrinho">
+                    🛒 Carrinho
+                    <span class="carrinho-badge" id="carrinhoBadge" style="display:none;">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO MARMITAS ========== -->
+    <section class="hero marmitas-hero">
+        <div class="hero-background" style="background: linear-gradient(135deg, #1a0a0a 0%, #0a0a1a 100%);"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="section-label">✦ Novidade Trip Burger ✦</p>
+            <h1 class="hero-title">NOSSAS</h1>
+            <h1 class="hero-title hero-title-gold">MARMITAS</h1>
+            <h2 class="hero-subtitle">SABOR SEM IGUAL</h2>
+            <p class="hero-description">Praticidade e sabor juntos. Ingredientes frescos, tempero especial da casa e porções generosas que vão te surpreender.</p>
+            <div class="hero-buttons">
+                <a href="#marmitas-cardapio" class="btn-cta">🍱 Ver Cardápio</a>
+                <a href="index.html" class="btn-outline-gold">← Voltar ao Site</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ========== MARMITAS CARDÁPIO ========== -->
+    <section id="marmitas-cardapio" class="cardapio">
+        <div class="container animate-fade-up">
+            <div class="section-header">
+                <p class="section-label">Cardápio de Marmitas</p>
+                <div class="section-divider"></div>
+                <h2 class="section-title">ESCOLHA A SUA<br><span class="text-gold">MARMITA</span></h2>
+            </div>
+
+            <!-- Grid renderizado dinamicamente -->
+            <div class="cardapio-grid" id="marmitasGrid"></div>
+
+            <div class="cardapio-footer" style="margin-top: 2rem;">
+                <button class="btn-outline-gold" onclick="abrirCarrinho()">🛒 Ver Carrinho</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="cta-banner animate-fade-up">
+        <div class="container">
+            <p class="section-label">Delivery Disponível</p>
+            <h2 class="cta-title">GOSTOU? PEÇA AGORA!</h2>
+            <p class="cta-description">Adicione sua marmita ao carrinho e finalize o pedido pelo WhatsApp em segundos!</p>
+            <button class="btn-cta btn-large" onclick="abrirCarrinho()">🛒 Ver Meu Carrinho</button>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-logo">
+                <div class="logo-text">TRIP<br>BURGER</div>
+            </div>
+            <div class="footer-links">
+                <a href="index.html#cardapio">Hambúrgueres</a>
+                <a href="index.html#bebidas">Bebidas</a>
+                <a href="index.html#localizacao">Localização</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.instagram.com/tripp_burguerrr/" target="_blank" title="Instagram" class="social-btn">
+                    <img src="img/Instagram.svg" alt="Instagram" class="social-icon">
+                </a>
+                <a href="https://wa.me/5554981507387?text=Olá!%20Gostaria%20de%20fazer%20um%20pedido.%20" target="_blank" title="WhatsApp" class="social-btn">
+                    <img src="img/whatsapp.png" alt="WhatsApp" class="social-icon-whats">
+                </a>
+            </div>
+            <div class="footer-divider"></div>
+            <p class="footer-text">© 2026 Trip Burger. Todos os direitos reservados.</p>
+            <p class="criador">Desenvolvido por
+            <a href="https://www.henriquemartinsdev.com.br" class="criador-link">Henrique Martins</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ========== WHATSAPP FLOATING ========== -->
+    <a href="https://wa.me/5554981507387?text=Olá!%20Gostaria%20de%20fazer%20um%20pedido.%20" target="_blank"
+        class="whatsapp-float" title="Falar no WhatsApp">
+        <img src="img/whatsapp.png" alt="WhatsApp" class="whatsapp-icon">
+    </a>
+
+    <!-- ========== CARRINHO DRAWER ========== -->
+    <div class="carrinho-overlay" id="carrinhoOverlay" onclick="fecharCarrinho()"></div>
+    <aside class="carrinho-drawer" id="carrinhoDrawer">
+        <div class="carrinho-header">
+            <h2 class="carrinho-titulo">🛒 Seu Pedido</h2>
+            <button class="carrinho-fechar" onclick="fecharCarrinho()" aria-label="Fechar carrinho">✕</button>
+        </div>
+        <div class="carrinho-body" id="carrinhoBody">
+            <div class="carrinho-vazio" id="carrinhoVazio">
+                <div class="carrinho-vazio-icon">🍱</div>
+                <p>Seu carrinho está vazio.</p>
+                <p class="carrinho-vazio-sub">Adicione marmitas ao pedido!</p>
+            </div>
+            <ul class="carrinho-lista" id="carrinhoLista"></ul>
+        </div>
+        <div class="carrinho-footer" id="carrinhoFooter" style="display:none;">
+            <div class="carrinho-total-row">
+                <span class="carrinho-total-label">Total</span>
+                <span class="carrinho-total-valor" id="carrinhoTotal">R$ 0,00</span>
+            </div>
+            <button class="btn-finalizar" onclick="abrirModalPedido()">Finalizar Pedido →</button>
+        </div>
+    </aside>
+
+    <!-- ========== MODAL DE ADICIONAIS ========== -->
+    <div class="modal-overlay" id="modalAdicionais" onclick="fecharModalAdicionais(event)">
+        <div class="modal-box modal-adicionais">
+            <button class="modal-fechar" onclick="fecharModalAdicionaisDireto()" aria-label="Fechar">✕</button>
+            <div class="modal-header">
+                <h2 class="modal-titulo">Deseja algum adicional?</h2>
+                <p class="modal-subtitulo" id="adicionalSubtitulo">Escolha bebidas ou molhos para acompanhar</p>
+            </div>
+            <div class="modal-body">
+                <div id="secaoSaladaMarmita" style="display: none; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <h3 class="adicionais-secao-titulo">Acompanhamento</h3>
+                    <div class="adicional-item" style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                        <div class="adicional-info" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="adicional-nome">Salada Mista</span>
+                            <span class="adicional-preco" id="precoSaladaMarmita" style="display:none; color: var(--success); font-weight: bold;">+ R$ 0,00</span>
+                        </div>
+                        <div style="display: flex; gap: 20px; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: #fff;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="saladaMarmita" id="radioSaladaNao" value="nao" checked onchange="TB_onChangeSaladaMarmita()" style="accent-color: var(--purple); width: 16px; height: 16px;">
+                                Não
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="radio" name="saladaMarmita" id="radioSaladaSim" value="sim" onchange="TB_onChangeSaladaMarmita()" style="accent-color: var(--purple); width: 16px; height: 16px;">
+                                Sim
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="secaoAdicionaisBebidasMolhos">
+                    <h3 class="adicionais-secao-titulo">Bebidas</h3>
+                    <div class="adicionais-lista" id="listaAdicionaisBebidas">
+                        <!-- Dinâmico -->
+                    </div>
+
+                    <h3 class="adicionais-secao-titulo" style="margin-top:20px;">Molhos</h3>
+                    <div class="adicionais-lista" id="listaAdicionaisMolhos">
+                        <!-- Dinâmico -->
+                    </div>
+                </div>
+
+                <h3 class="adicionais-secao-titulo" style="margin-top:20px;">✏️ Observações</h3>
+                <textarea
+                    id="inputObservacao"
+                    class="observacao-input"
+                    placeholder="Ex: tirar cebola, sem picles, ponto da carne bem passado..."
+                    rows="3"
+                    maxlength="300"
+                ></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-finalizar" onclick="confirmarAdicionaisEIrParaCarrinho()">
+                    Adicionar e Ir para Carrinho →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL DE FINALIZAÇÃO ========== -->
+    <div class="modal-overlay" id="modalOverlay" onclick="fecharModal(event)">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-fechar" onclick="fecharModalDireto()" aria-label="Fechar">✕</button>
+            <div class="modal-header">
+                <h2 class="modal-titulo">Finalizar Pedido</h2>
+                <p class="modal-subtitulo">Como você prefere receber?</p>
+            </div>
+            <div class="modal-body">
+                <div class="tipo-entrega-group">
+                    <button class="tipo-btn active" id="btnRetirar" onclick="selecionarTipo('retirar')">
+                        <span class="tipo-icon">🏪</span>
+                        <span class="tipo-label">Retirar no Local</span>
+                    </button>
+                    <button class="tipo-btn" id="btnEntregar" onclick="selecionarTipo('entregar')">
+                        <span class="tipo-icon">🚀</span>
+                        <span class="tipo-label">Delivery</span>
+                    </button>
+                </div>
+                <div class="endereco-fields" id="enderecoFields" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label" for="inputRua">Rua / Avenida *</label>
+                        <input type="text" id="inputRua" class="form-input" placeholder="Ex: Rua das Flores" autocomplete="street-address">
+                    </div>
+                    <div class="form-row-2col">
+                        <div class="form-group">
+                            <label class="form-label" for="inputNumero">Número *</label>
+                            <input type="text" id="inputNumero" class="form-input" placeholder="Ex: 123" inputmode="numeric">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="inputBairro">Bairro *</label>
+                            <input type="text" id="inputBairro" class="form-input" placeholder="Ex: Centro">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="inputReferencia">Ponto de Referência</label>
+                        <input type="text" id="inputReferencia" class="form-input" placeholder="Ex: Próximo ao mercado">
+                    </div>
+                </div>
+                <div class="modal-resumo">
+                    <h3 class="resumo-titulo">Resumo do Pedido</h3>
+                    <ul class="resumo-lista" id="resumoLista"></ul>
+                    <div class="resumo-total-row">
+                        <span>Total</span>
+                        <span id="resumoTotal" class="resumo-total-valor">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-whatsapp" onclick="enviarParaWhatsApp()">
+                    <img src="img/whatsapp.png" alt="WhatsApp" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:8px;">
+                    Faça Seu Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+
+    <script src="js/db.js"></script>
+    <script src="js/render.js"></script>
+    <script src="script.js?v=2"></script>
+    <!-- Init específico da página marmitas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            TB_initDB();
+            TB_listenProdutos('marmitas', marmitas => {
+                TB_renderGrid(marmitas, document.getElementById('marmitasGrid'));
+            });
+        });
+    </script>
+</body>
+
+</html>

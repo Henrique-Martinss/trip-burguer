@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Trip Burger</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" type="image/png" href="../img/trip.jpeg">
+</head>
+<body>
+
+  <!-- ========== TELA DE LOGIN ========== -->
+  <div id="loginScreen" class="login-screen" style="display:none;">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="../img/trip.jpeg" alt="Logo" class="login-logo-img">
+        <div class="login-logo-text">TRIP<br>BURGER</div>
+      </div>
+      <h1 class="login-title">Painel Admin</h1>
+      <p class="login-sub">Acesso restrito</p>
+      <div class="login-form">
+        <div class="login-field">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="Digite seu email" autocomplete="username" style="width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; font-size: 1rem; margin-top: 8px;">
+        </div>
+        <div class="login-field" style="margin-top: 15px;">
+          <label for="loginSenha">Senha</label>
+          <div class="senha-wrapper">
+            <input type="password" id="loginSenha" placeholder="Digite a senha" autocomplete="current-password">
+            <button type="button" class="btn-eye" id="btnToggleSenha" onclick="adminToggleSenha()" aria-label="Mostrar senha" title="Mostrar senha">👁️</button>
+          </div>
+        </div>
+        <p class="login-erro" id="loginErro"></p>
+        <button class="btn-login" id="btnLogin" onclick="adminFazerLogin()">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== PAINEL ADMIN ========== -->
+  <div id="adminPanel" class="admin-panel" style="display:none;">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <img src="../img/trip.jpeg" alt="Logo" class="sidebar-logo-img">
+        <div class="sidebar-brand-text">TRIP<br><span>BURGER</span></div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sidebar-btn active" id="sidebarBtnProdutos" onclick="adminNavegar('produtos')">
+          <span class="sidebar-icon">📦</span>
+          <span>Produtos</span>
+        </button>
+        <button class="sidebar-btn" id="sidebarBtnPedidos" onclick="adminNavegar('pedidos')">
+          <span class="sidebar-icon">🧾</span>
+          <span>Pedidos</span>
+          <span class="sidebar-badge" id="pedidosBadge" style="display:none;">0</span>
+        </button>
+        <button class="sidebar-btn" id="sidebarBtnAvaliacoes" onclick="adminNavegar('avaliacoes')">
+          <span class="sidebar-icon">⭐</span>
+          <span>Avaliações</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="../index.html" target="_blank" class="sidebar-ver-site">🌐 Ver Site</a>
+        <button class="btn-logout" onclick="adminLogout()">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- ===== ABA: PRODUTOS ===== -->
+      <div id="panelProdutos" class="admin-panel-section">
+        <!-- Stats bar -->
+        <div class="stats-bar">
+          <div class="stat-card">
+            <span class="stat-num" id="statTotal">0</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statHamb">0</span>
+            <span class="stat-label">Hambúrgueres</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statXis">0</span>
+            <span class="stat-label">Xis</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statBeb">0</span>
+            <span class="stat-label">Bebidas</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statMarm">0</span>
+            <span class="stat-label">Marmitas</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statComb">0</span>
+            <span class="stat-label">Combos</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statPorc">0</span>
+            <span class="stat-label">Porções</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statMolhos">0</span>
+            <span class="stat-label">Molhos</span>
+          </div>
+          <div class="stat-card stat-warn">
+            <span class="stat-num" id="statEsgo">0</span>
+            <span class="stat-label">Esgotados</span>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tab-bar">
+          <button class="tab-btn active" data-cat="hamburgueres" onclick="adminMudarAba(this)">🍔 Hambúrgueres</button>
+          <button class="tab-btn" data-cat="xis"          onclick="adminMudarAba(this)">🌮 Xis</button>
+          <button class="tab-btn" data-cat="combos"       onclick="adminMudarAba(this)">🍔🍟 Combos</button>
+          <button class="tab-btn" data-cat="porcoes"      onclick="adminMudarAba(this)">🍟 Porções</button>
+          <button class="tab-btn" data-cat="molhos"       onclick="adminMudarAba(this)">🫙 Molhos</button>
+          <button class="tab-btn" data-cat="bebidas"      onclick="adminMudarAba(this)">🥤 Bebidas</button>
+          <button class="tab-btn" data-cat="marmitas"     onclick="adminMudarAba(this)">🍱 Marmitas</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="admin-toolbar">
+          <h2 class="admin-section-title" id="adminSectionTitle">Hambúrgueres</h2>
+          <button class="btn-add-produto" onclick="adminAbrirModal()">+ Adicionar Produto</button>
+        </div>
+
+        <div class="admin-config-row" style="margin-bottom: 1.5rem; display: flex; justify-content: flex-end;">
+          <div style="display: flex; flex-direction: column; border: 1px solid var(--border); padding: 1rem; border-radius: 10px; background: #0d0d0d; width: fit-content;">
+            <label for="inputValorSalada" style="margin-bottom: 0.5rem; color: #fff; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;">Valor Adicional Salada (Marmitas)</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="number" id="inputValorSalada" class="form-input" style="width: 150px; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border); background: #141414; color: #fff;" placeholder="0.00" step="0.01" min="0">
+              <button class="btn-admin-action btn-editar" style="background: var(--purple); color: #fff; border: none; padding: 0 1.5rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 8px;" onclick="adminSalvarValorSalada()">Salvar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="admin-grid" id="adminGrid"></div>
+      </div>
+
+      <!-- ===== ABA: PEDIDOS ===== -->
+      <div id="panelPedidos" class="admin-panel-section" style="display:none;">
+        <div class="pedidos-header">
+          <h2 class="pedidos-titulo">🧾 Pedidos Recebidos</h2>
+          <p class="pedidos-sub">Atualizados em tempo real</p>
+        </div>
+
+        <div class="pedidos-colunas">
+          <!-- Recebido -->
+          <div class="pedido-coluna">
+            <div class="coluna-header coluna-recebido">
+              <span>📬 Recebido</span>
+              <span class="coluna-count" id="countRecebido">0</span>
+            </div>
+            <div class="coluna-lista" id="listaRecebido"></div>
+          </div>
+
+          <!-- Em Preparação -->
+          <div class="pedido-coluna">
+            <div class="coluna-header coluna-preparando">
+              <span>👨‍🍳 Em Preparação</span>
+              <span class="coluna-count" id="countPreparando">0</span>
+            </div>
+            <div class="coluna-lista" id="listaPreparando"></div>
+          </div>
+
+          <!-- Pronto -->
+          <div class="pedido-coluna">
+            <div class="coluna-header coluna-pronto">
+              <span>🛎️ Pronto</span>
+              <span class="coluna-count" id="countPronto">0</span>
+            </div>
+            <div class="coluna-lista" id="listaPronto"></div>
+          </div>
+
+          <!-- Entregue -->
+          <div class="pedido-coluna">
+            <div class="coluna-header coluna-entregue">
+              <span>✅ Entregue</span>
+              <span class="coluna-count" id="countEntregue">0</span>
+            </div>
+            <div class="coluna-lista" id="listaEntregue"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ABA: AVALIACOES E CONFIG ===== -->
+      <div id="panelAvaliacoes" class="admin-panel-section" style="display:none;">
+        <div class="admin-toolbar" style="margin-bottom: 2rem;">
+          <div>
+            <h2 class="admin-section-title">Configurações & Avaliações</h2>
+            <p class="pedidos-sub" style="margin-top: 5px;">Gerencie as configurações gerais e os depoimentos</p>
+          </div>
+          <button class="btn-add-produto" onclick="adminAbrirModalAvaliacao()">+ Adicionar Avaliação</button>
+        </div>
+
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+          <div class="form-group-toggle" style="flex: 1; min-width: 280px; max-width: 400px;">
+            <label class="toggle-label">
+              <span>Exibir seção de depoimentos no site</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="toggleMostrarAvaliacoes" onchange="adminToggleMostrarAvaliacoes(this)">
+                <span class="toggle-slider"></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-grid" id="avaliacoesGrid">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ========== MODAL ADD/EDIT ========== -->
+  <div class="modal-overlay" id="adminModalOverlay">
+    <div class="admin-modal" id="adminModal">
+      <div class="admin-modal-header">
+        <h3 id="adminModalTitulo">Adicionar Produto</h3>
+        <button class="modal-fechar-btn" onclick="adminFecharModal()">✕</button>
+      </div>
+
+      <div class="admin-modal-body">
+        <input type="hidden" id="editId">
+
+        <!-- Foto -->
+        <div class="form-group form-group-foto">
+          <label>Foto do Produto</label>
+          <div class="foto-upload-area" id="fotoUploadArea" onclick="document.getElementById('inputFoto').click()">
+            <img id="fotoPreview" src="" alt="preview" style="display:none;">
+            <div id="fotoPlaceholder" class="foto-placeholder">
+              <span class="foto-icon">📷</span>
+              <span>Clique para escolher uma imagem</span>
+              <span class="foto-hint">JPG, PNG ou WebP • Máx. 2MB</span>
+            </div>
+          </div>
+          <input type="file" id="inputFoto" accept="image/*" style="display:none;" onchange="adminPreviewFoto(this)">
+          <p class="foto-dica">💡 Use imagens 4:3 (ex: 800×600px) para melhor ajuste nos cards.</p>
+        </div>
+
+        <!-- Linha: Nome + Preço -->
+        <div class="form-row-2col">
+          <div class="form-group">
+            <label for="inputNome">Nome *</label>
+            <input type="text" id="inputNome" placeholder="Ex: Clássico Smash" maxlength="60">
+          </div>
+          <div class="form-group">
+            <label for="inputPreco">Preço (R$) *</label>
+            <input type="number" id="inputPreco" placeholder="0.00" min="0" step="0.01">
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="form-group">
+          <label for="inputDesc">Descrição *</label>
+          <textarea id="inputDesc" placeholder="Ingredientes e diferenciais do produto..." rows="3" maxlength="300"></textarea>
+        </div>
+
+        <!-- Linha: Categoria + Tag + Cor da Tag -->
+        <div class="form-row-3col">
+          <div class="form-group">
+            <label for="inputCategoria">Categoria *</label>
+            <select id="inputCategoria">
+              <option value="hamburgueres">🍔 Hambúrgueres</option>
+              <option value="xis">🌮 Xis</option>
+              <option value="combos">🍔🍟 Combos</option>
+              <option value="porcoes">🍟 Porções</option>
+              <option value="molhos">🫙 Molhos</option>
+              <option value="bebidas">🥤 Bebidas</option>
+              <option value="marmitas">🍱 Marmitas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inputTag">Tag (opcional)</label>
+            <input type="text" id="inputTag" placeholder="Ex: DESTAQUE" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label for="inputTagColor">Cor da Tag</label>
+            <input type="color" id="inputTagColor" value="#8C2493">
+          </div>
+        </div>
+
+        <!-- Esgotado toggle -->
+        <div class="form-group form-group-toggle">
+          <label class="toggle-label">
+            <span>Marcar como Esgotado</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="inputEsgotado">
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+          <p class="toggle-hint">Produto aparecerá com overlay "ESGOTADO" e irá para o final da lista.</p>
+        </div>
+      </div>
+
+      <div class="admin-modal-footer">
+        <button class="btn-cancelar" onclick="adminFecharModal()">Cancelar</button>
+        <button class="btn-salvar" id="btnSalvar" onclick="adminSalvarProduto()">Salvar Produto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL CONFIRMAÇÃO DELETE ========== -->
+  <div class="modal-overlay" id="deleteOverlay">
+    <div class="delete-modal">
+      <div class="delete-icon">🗑️</div>
+      <h3>Excluir Produto?</h3>
+      <p id="deleteNome"></p>
+      <div class="delete-actions">
+        <button class="btn-cancelar" onclick="adminFecharDelete()">Cancelar</button>
+        <button class="btn-deletar" id="btnConfirmarDelete" onclick="adminConfirmarDelete()">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL AVALIAÇÃO ========== -->
+  <div class="modal-overlay" id="modalAvaliacaoOverlay">
+    <div class="admin-modal" id="modalAvaliacao">
+      <div class="admin-modal-header">
+        <h3 id="modalAvaliacaoTitulo">Adicionar Avaliação</h3>
+        <button class="modal-fechar-btn" onclick="adminFecharModalAvaliacao()">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <input type="hidden" id="editAvaliacaoId">
+        <div class="form-group">
+          <label for="inputAvaliacaoAutor">Nome do Cliente *</label>
+          <input type="text" id="inputAvaliacaoAutor" placeholder="Ex: João da Silva" maxlength="60">
+        </div>
+        <div class="form-group">
+          <label for="inputAvaliacaoTexto">Depoimento *</label>
+          <textarea id="inputAvaliacaoTexto" placeholder="O que o cliente disse..." rows="4" maxlength="400"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="inputAvaliacaoEstrelas">Nota (Estrelas)</label>
+          <select id="inputAvaliacaoEstrelas">
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-cancelar" onclick="adminFecharModalAvaliacao()">Cancelar</button>
+        <button class="btn-salvar" id="btnSalvarAvaliacao" onclick="adminSalvarAvaliacao()">Salvar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="admin-toast" id="adminToast"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+
+  <script src="admin-init.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/render.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
