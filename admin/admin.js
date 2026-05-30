@@ -89,10 +89,12 @@ function adminLogout() {
   if (unsubscribeStats) unsubscribeStats();
   if (unsubscribePedidos) unsubscribePedidos();
   if (unsubscribeAvaliacoes) unsubscribeAvaliacoes();
+  if (unsubscribeHorarios) unsubscribeHorarios();
   unsubscribeProdutos = null;
   unsubscribeStats    = null;
   unsubscribePedidos  = null;
   unsubscribeAvaliacoes = null;
+  unsubscribeHorarios = null;
   
   TB_fazerLogout();
   document.getElementById('adminPanel').style.display  = 'none';
@@ -110,6 +112,7 @@ function mostrarPainel() {
   iniciarStatsListener();
   adminInitPedidos();
   iniciarConfigListener();
+  adminInitConfig();
 }
 
 let unsubscribeConfig = null;
@@ -619,6 +622,71 @@ async function adminDeletarAvaliacao(id) {
   try {
     await TB_deleteAvaliacao(id);
     adminToast('🗑️ Avaliação excluída.');
+  } catch (e) {
+    adminToast('❌ Erro: ' + e.message);
+  }
+}
+
+// ============================================================
+// CONFIGURAÇÕES — HORÁRIOS
+// ============================================================
+
+function adminInitConfig() {
+  if (unsubscribeHorarios) return;
+  unsubscribeHorarios = TB_listenHorarioStatus(status => {
+    _horarioStatusAdmin = status;
+    atualizarStatusHorarioUI();
+  });
+  atualizarStatusHorarioUI();
+}
+
+function atualizarStatusHorarioUI() {
+  const statusDiv = document.getElementById('statusHorarioDiv');
+  if (!statusDiv) return;
+
+  const statusAberto = TB_verificarSeAberto(_horarioStatusAdmin);
+  
+  if (_horarioStatusAdmin.aberturaManual === true) {
+    statusDiv.innerHTML = '🟢 <strong>ABERTO MANUALMENTE</strong>';
+    statusDiv.style.color = '#4caf50';
+  } else if (_horarioStatusAdmin.aberturaManual === false) {
+    statusDiv.innerHTML = '🔴 <strong>FECHADO MANUALMENTE</strong>';
+    statusDiv.style.color = '#CC2200';
+  } else {
+    // Modo automático
+    if (statusAberto.aberto) {
+      statusDiv.innerHTML = `🟢 <strong>ABERTO</strong> (${statusAberto.periodo})`;
+      statusDiv.style.color = '#4caf50';
+    } else {
+      const proximoHorario = obterProximoHorarioAbertura();
+      statusDiv.innerHTML = `🔴 <strong>FECHADO</strong> — ${proximoHorario}`;
+      statusDiv.style.color = '#CC2200';
+    }
+  }
+}
+
+async function adminAbrirManualmente() {
+  try {
+    await TB_saveHorarioStatus({ aberturaManual: true });
+    adminToast('🟢 Loja ABERTA manualmente!');
+  } catch (e) {
+    adminToast('❌ Erro: ' + e.message);
+  }
+}
+
+async function adminFecharManualmente() {
+  try {
+    await TB_saveHorarioStatus({ aberturaManual: false });
+    adminToast('🔴 Loja FECHADA manualmente!');
+  } catch (e) {
+    adminToast('❌ Erro: ' + e.message);
+  }
+}
+
+async function adminRestaurarAuto() {
+  try {
+    await TB_saveHorarioStatus({ aberturaManual: null });
+    adminToast('⚙️ Voltado ao modo AUTOMÁTICO!');
   } catch (e) {
     adminToast('❌ Erro: ' + e.message);
   }
