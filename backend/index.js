@@ -22,10 +22,10 @@ app.post('/api/pix/create', async (req, res) => {
         const paymentData = {
             body: {
                 transaction_amount: parseFloat(transaction_amount),
-                description: description || 'Pedido Trip Burger',
+                description: description || 'Pedido Trip Burguer',
                 payment_method_id: 'pix',
                 payer: {
-                    email: email || 'cliente@tripburger.com',
+                    email: email || 'cliente@tripburguer.com',
                 },
             }
         };

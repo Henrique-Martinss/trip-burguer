@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — Renderização de Cards de Produto
+   TRIP BURGUER — Renderização de Cards de Produto
    Compartilhado entre index.html e marmitas.html
    ============================================================ */
 
@@ -16,10 +16,10 @@ function TB_formatBRL(valor) {
 
 /**
  * Alterna a descrição entre expandida e recolhida.
- * Opera no wrapper .burger-desc-wrap do card individual.
+ * Opera no wrapper .burguer-desc-wrap do card individual.
  */
 function TB_toggleDesc(btn) {
-  const wrap     = btn.closest('.burger-desc-wrap');
+  const wrap     = btn.closest('.burguer-desc-wrap');
   const expanded = wrap.classList.toggle('expanded');
   btn.innerHTML  = expanded ? '▲ ver menos' : '▼ ver mais';
   btn.classList.toggle('btn-ver-mais-ativo', expanded);
@@ -38,7 +38,7 @@ function TB_renderCard(produto) {
   const isBebida = produto.categoria === 'bebidas';
 
   const tagHtml = produto.tag
-    ? `<span class="burger-tag" style="background-color:${esc(produto.tagColor || '#8C2493')}">${esc(produto.tag)}</span>`
+    ? `<span class="burguer-tag" style="background-color:${esc(produto.tagColor || '#8C2493')}">${esc(produto.tag)}</span>`
     : '';
 
   const overlayHtml = esgotado
@@ -66,31 +66,31 @@ function TB_renderCard(produto) {
     if (textoLongo) {
       // Wrapper colapsável com botão posicionado no final
       descHtml = `
-        <div class="burger-desc-wrap">
-          <p class="burger-desc">${esc(produto.descricao)}</p>
+        <div class="burguer-desc-wrap">
+          <p class="burguer-desc">${esc(produto.descricao)}</p>
           <button class="btn-ver-mais" onclick="TB_toggleDesc(this)">▼ ver mais</button>
         </div>`;
     } else {
-      descHtml = `<p class="burger-desc">${esc(produto.descricao)}</p>`;
+      descHtml = `<p class="burguer-desc">${esc(produto.descricao)}</p>`;
     }
   }
 
   return `
-    <div class="burger-card${esgotado ? ' card-esgotado' : ''}${isBebida ? ' bebida-card' : ''}">
-      <div class="burger-image">
+    <article class="burguer-card${esgotado ? ' card-esgotado' : ''}${isBebida ? ' bebida-card' : ''}">
+      <div class="burguer-image">
         <img src="${imgSrc}" alt="${esc(produto.nome)}" loading="lazy">
         ${tagHtml}
         ${overlayHtml}
       </div>
-      <div class="burger-content">
-        <h3 class="burger-name">${esc(produto.nome)}</h3>
+      <div class="burguer-content">
+        <h3 class="burguer-name">${esc(produto.nome)}</h3>
         ${descHtml}
-        <div class="burger-footer">
-          <span class="burger-price">R$ ${TB_formatBRL(produto.preco)}</span>
+        <div class="burguer-footer">
+          <span class="burguer-price">R$ ${TB_formatBRL(produto.preco)}</span>
           ${addBtnHtml}
         </div>
       </div>
-    </div>`;
+    </article>`;
 }
 
 /**

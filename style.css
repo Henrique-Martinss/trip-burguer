@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — CSS Stylesheet
+   TRIP BURGUER — CSS Stylesheet
    Design: Dark Forge Premium — Industrial Dark Gourmet
    Colors: #0a0a0a (bg), #8C2493 (purple), #CC2200 (red CTA)
    Fonts: Bebas Neue (display), Oswald (headings), Inter (body)
@@ -302,6 +302,7 @@ body {
 }
 
 .hero-subtitle {
+    display: block;
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(1.8rem, 5vw, 3.5rem);
     line-height: 1;
@@ -310,7 +311,7 @@ body {
     opacity: 0.9;
 }
 
-.hero-description {
+.hero-content .hero-description {
     font-family: 'Inter', sans-serif;
     color: #ccc;
     font-size: clamp(0.95rem, 2vw, 1.15rem);
@@ -426,7 +427,7 @@ body {
     align-items: start; /* Impede que os cards estiquem e "abram" juntos */
 }
 
-.burger-card {
+.burguer-card {
     background: #141414;
     border: 1px solid #4f2f52;
     border-radius: 10px;
@@ -436,30 +437,30 @@ body {
     flex-direction: column;
 }
 
-.burger-card:hover {
+.burguer-card:hover {
     transform: translateY(-4px);
     border-color: #8C2493;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(140,36,147, 0.12);
 }
 
-.burger-image {
+.burguer-image {
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;   /* quadrado */
 }
 
-.burger-image img {
+.burguer-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
 
-.burger-card:hover .burger-image img {
+.burguer-card:hover .burguer-image img {
     transform: scale(1.07);
 }
 
-.burger-tag {
+.burguer-tag {
     position: absolute;
     top: 0.6rem;
     left: 0.6rem;
@@ -472,14 +473,14 @@ body {
     letter-spacing: 0.1em;
 }
 
-.burger-content {
+.burguer-content {
     padding: 0.85rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-.burger-name {
+.burguer-name {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.25rem;
     color: #fff;
@@ -490,13 +491,13 @@ body {
     text-overflow: ellipsis;
 }
 
-.burger-desc-wrap {
+.burguer-desc-wrap {
     display: flex;
     flex-direction: column;
     margin-bottom: 0.75rem;
 }
 
-.burger-desc {
+.burguer-desc {
     font-family: 'Inter', sans-serif;
     color: #777;
     font-size: 0.78rem;
@@ -512,7 +513,7 @@ body {
     overflow: hidden;
 }
 
-.burger-desc-wrap.expanded .burger-desc {
+.burguer-desc-wrap.expanded .burguer-desc {
     display: block;
     -webkit-line-clamp: unset;
     line-clamp: unset;
@@ -549,7 +550,7 @@ body {
     color: #ff4422;
 }
 
-.burger-footer {
+.burguer-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -557,7 +558,7 @@ body {
     margin-top: auto;
 }
 
-.burger-price {
+.burguer-price {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
     color: #fc0000;
@@ -1678,12 +1679,12 @@ body {
 }
 
 /* Card de bebida sem descrição: reduz padding inferior do content */
-.bebida-card .burger-content {
+.bebida-card .burguer-content {
     padding-bottom: 1.25rem;
 }
 
 /* Ajuste da imagem da bebida para não cortar */
-.bebida-card .burger-image img {
+.bebida-card .burguer-image img {
     object-fit: contain;
     background-color: #141414; /* Mantém o fundo escuro caso a imagem tenha transparência */
     padding: 1rem; /* Adiciona um respiro em volta da garrafa/lata */
@@ -1894,12 +1895,12 @@ body {
 }
 
 /* ========== VER MAIS / VER MENOS (descrição dos cards) ========== */
-.burger-desc {
+.burguer-desc {
     -webkit-line-clamp: 3;
     line-clamp: 3;
 }
 
-.burger-desc.burger-desc-expanded {
+.burguer-desc.burguer-desc-expanded {
     display: block;           /* cancela o -webkit-box do clamp */
     -webkit-line-clamp: unset;
     line-clamp: unset;

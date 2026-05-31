@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — Admin Panel JavaScript
+   TRIP BURGUER — Admin Panel JavaScript
    ============================================================ */
 
 let adminCatAtual = 'hamburgueres';

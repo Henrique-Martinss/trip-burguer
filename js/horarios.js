@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — Sistema de Horários de Funcionamento
+   TRIP BURGUER — Sistema de Horários de Funcionamento
    ============================================================ */
 
 // Horários de funcionamento automáticos

@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — JavaScript
+   TRIP BURGUER — JavaScript
    Design: Dark Forge Premium — Industrial Dark Gourmet
    Funcionalidades: Navbar, animações, Carrinho, Modal, WhatsApp
                     + Renderização dinâmica de produtos (db.js/render.js)
@@ -470,7 +470,7 @@ async function enviarParaWhatsApp() {
     };
 
     const linhas = [];
-    linhas.push('*NOVO PEDIDO - TRIP BURGER*');
+    linhas.push('*NOVO PEDIDO - TRIP BURGUER*');
     linhas.push('----------------------------');
     linhas.push('');
     linhas.push('*Itens do pedido:*');
@@ -602,7 +602,7 @@ function abrirModalPix(pedidoObj, mensagemBase) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             transaction_amount: pedidoObj.total,
-            description: 'Pedido Trip Burger'
+            description: 'Pedido Trip Burguer'
         })
     })
     .then(res => res.json())
@@ -823,5 +823,5 @@ function atualizarIndicadorHorario() {
     }
 }
 
-console.log('✓ Trip Burger - Landing Page carregada com sucesso!');
+console.log('✓ Trip Burguer - Landing Page carregada com sucesso!');
 console.log('✓ Carrinho, produtos dinâmicos e animações ativos.');

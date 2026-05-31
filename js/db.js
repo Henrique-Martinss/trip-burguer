@@ -1,5 +1,5 @@
 /* ============================================================
-   TRIP BURGER — Camada de Dados (Data Layer)
+   TRIP BURGUER — Camada de Dados (Data Layer)
    🔥 FIRESTORE ATIVADO: Todos os dados armazenados no Cloud Firestore
    ============================================================ */
 
