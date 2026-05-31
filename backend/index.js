@@ -50,6 +50,21 @@ app.post('/api/pix/create', async (req, res) => {
     }
 });
 
+// Verificar status de um pagamento PIX
+app.get('/api/pix/status/:payment_id', async (req, res) => {
+    try {
+        const { payment_id } = req.params;
+        const result = await payment.get({ id: payment_id });
+        return res.json({
+            status: result.status,           // 'pending', 'approved', 'cancelled', 'rejected'
+            status_detail: result.status_detail
+        });
+    } catch (error) {
+        console.error('Erro ao verificar status PIX:', error);
+        return res.status(500).json({ error: 'Erro ao verificar pagamento.' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Backend PIX rodando na porta ${PORT}`);

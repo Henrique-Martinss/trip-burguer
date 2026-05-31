@@ -384,6 +384,14 @@ function abrirModalPedido() {
         return;
     }
 
+    // Bloquear finalização se a loja estiver fechada
+    const statusAberto = TB_verificarSeAberto(_horarioStatus);
+    if (!statusAberto.aberto) {
+        const proximo = obterProximoHorarioAbertura();
+        mostrarToast(`🔴 Loja fechada agora. ${proximo}`);
+        return;
+    }
+
     resumoLista.innerHTML = '';
     carrinho.forEach(item => {
         const li = document.createElement('li');
@@ -542,9 +550,14 @@ async function enviarParaWhatsApp() {
 // ========== LÓGICA DO PIX ==========
 let _pedidoAtual = null;
 let _mensagemAtual = '';
+let _paymentId = null;
+let _pollingInterval = null;
+let _wakeUpTimeout = null;
+
+const BACKEND_URL = 'https://trip-burguer.onrender.com';
 
 function finalizarPedidoLocal(pedidoObj, mensagem) {
-    const numero   = '5554981507387';
+    const numero   = '5554999381351';
     const url      = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem);
 
     TB_addPedido(pedidoObj).catch(e => console.warn('Pedido não salvo no Firestore:', e));
@@ -559,22 +572,31 @@ function finalizarPedidoLocal(pedidoObj, mensagem) {
 function abrirModalPix(pedidoObj, mensagemBase) {
     _pedidoAtual = pedidoObj;
     _mensagemAtual = mensagemBase;
+    _paymentId = null;
+    if (_pollingInterval) { clearInterval(_pollingInterval); _pollingInterval = null; }
+    if (_wakeUpTimeout)   { clearTimeout(_wakeUpTimeout);   _wakeUpTimeout = null; }
 
     fecharModalDireto();
     const modalPix = document.getElementById('modalPix');
     modalPix.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    document.getElementById('pixLoading').style.display = 'flex';
+    const pixLoadingEl = document.getElementById('pixLoading');
+    pixLoadingEl.style.display = 'flex';
     document.getElementById('pixContainer').style.display = 'none';
+
     const btn = document.getElementById('btnConfirmarPix');
     btn.disabled = true;
     btn.style.opacity = '0.5';
     btn.style.cursor = 'not-allowed';
+    btn.style.background = '';
 
-    // Requisição para o nosso Backend Node.js
-    const BACKEND_URL = 'https://trip-burguer.onrender.com';
-    
+    // Após 8s sem resposta, avisa que o servidor pode estar acordando
+    _wakeUpTimeout = setTimeout(() => {
+        const msg = document.getElementById('pixLoadingMsg');
+        if (msg) msg.innerHTML = 'Servidor iniciando...<br><span style="font-size:0.8rem;color:#aaa;">Pode levar até 60s na primeira vez ☕</span>';
+    }, 8000);
+
     fetch(`${BACKEND_URL}/api/pix/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -585,21 +607,23 @@ function abrirModalPix(pedidoObj, mensagemBase) {
     })
     .then(res => res.json())
     .then(data => {
+        clearTimeout(_wakeUpTimeout); _wakeUpTimeout = null;
         if (data.error) throw new Error(data.error);
 
-        document.getElementById('pixLoading').style.display = 'none';
+        pixLoadingEl.style.display = 'none';
         document.getElementById('pixContainer').style.display = 'block';
 
         document.getElementById('pixQRCode').src = 'data:image/png;base64,' + data.qr_code_base64;
         document.getElementById('inputCopiaCola').value = data.qr_code;
 
+        _paymentId = data.payment_id;
         _mensagemAtual = mensagemBase + `\n\n*Aviso:* Pagamento PIX gerado (ID MP: ${data.payment_id})`;
 
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.style.cursor = 'pointer';
+        // Inicia verificação automática do pagamento
+        iniciarPollingPix();
     })
     .catch(err => {
+        clearTimeout(_wakeUpTimeout); _wakeUpTimeout = null;
         console.error('Erro PIX:', err);
         mostrarToast('Erro ao gerar PIX. Tente outra forma de pagamento ou avise no WhatsApp.');
         fecharModalPixDireto();
@@ -607,11 +631,57 @@ function abrirModalPix(pedidoObj, mensagemBase) {
     });
 }
 
+function iniciarPollingPix() {
+    verificarStatusPix(); // verifica imediatamente
+    _pollingInterval = setInterval(verificarStatusPix, 5000); // depois a cada 5s
+}
+
+async function verificarStatusPix() {
+    if (!_paymentId) return;
+    try {
+        const res  = await fetch(`${BACKEND_URL}/api/pix/status/${_paymentId}`);
+        const data = await res.json();
+
+        const statusText = document.getElementById('pixStatusText');
+        const statusRow  = document.getElementById('pixStatusRow');
+        const spinner    = statusRow ? statusRow.querySelector('.pix-status-spinner') : null;
+
+        if (data.status === 'approved') {
+            clearInterval(_pollingInterval); _pollingInterval = null;
+
+            if (statusText) statusText.textContent = '✅ Pagamento confirmado!';
+            if (statusRow)  {
+                statusRow.style.background   = 'rgba(37, 211, 102, 0.12)';
+                statusRow.style.borderColor  = 'rgba(37, 211, 102, 0.4)';
+            }
+            if (spinner) spinner.style.display = 'none';
+
+            const btn = document.getElementById('btnConfirmarPix');
+            btn.disabled = false;
+            btn.style.opacity  = '1';
+            btn.style.cursor   = 'pointer';
+            btn.style.background = 'linear-gradient(135deg, #25d366, #128c7e)';
+
+            mostrarToast('✅ Pagamento PIX confirmado! Clique para enviar o pedido.');
+
+        } else if (data.status === 'cancelled' || data.status === 'rejected') {
+            clearInterval(_pollingInterval); _pollingInterval = null;
+            if (statusText) statusText.textContent = '❌ PIX expirado ou cancelado.';
+            mostrarToast('PIX expirado. Tente novamente.');
+        }
+        // status 'pending' → continua polling
+    } catch (e) {
+        console.warn('Erro ao verificar status PIX:', e);
+    }
+}
+
 function fecharModalPix(event) {
     if (event.target === document.getElementById('modalPix')) fecharModalPixDireto();
 }
 
 function fecharModalPixDireto() {
+    if (_pollingInterval) { clearInterval(_pollingInterval); _pollingInterval = null; }
+    if (_wakeUpTimeout)   { clearTimeout(_wakeUpTimeout);   _wakeUpTimeout = null; }
     document.getElementById('modalPix').classList.remove('active');
     document.body.style.overflow = '';
 }
@@ -694,14 +764,13 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 /**
- * Atualizar indicador visual de horário no navbar
+ * Atualiza indicador visual de horário no navbar e controla o botão do carrinho
  */
 function atualizarIndicadorHorario() {
     const statusAberto = TB_verificarSeAberto(_horarioStatus);
-    
-    // Criar ou atualizar o indicador
+
+    // --- Indicador fixo (badge) ---
     let indicador = document.getElementById('indicadorHorario');
-    
     if (!indicador) {
         indicador = document.createElement('div');
         indicador.id = 'indicadorHorario';
@@ -726,10 +795,32 @@ function atualizarIndicadorHorario() {
         `;
         document.body.appendChild(indicador);
     }
-    
-    const icon = statusAberto.aberto ? '🟢 Aberto' : '🔴 Fechado';
-    indicador.innerHTML = icon;
+    indicador.innerHTML = statusAberto.aberto ? '🟢 Aberto' : '🔴 Fechado';
     indicador.style.background = statusAberto.aberto ? '#4caf50' : '#CC2200';
+
+    // --- Botão "Finalizar Pedido" no carrinho ---
+    const btnFinalizar = document.getElementById('btnFinalizarPedido');
+    const lojaFechadaBar = document.getElementById('lojaFechadaBar');
+    const lojaFechadaProximo = document.getElementById('lojaFechadaProximo');
+
+    if (btnFinalizar) {
+        if (statusAberto.aberto) {
+            btnFinalizar.disabled = false;
+            btnFinalizar.style.opacity = '1';
+            btnFinalizar.style.cursor = 'pointer';
+            btnFinalizar.style.filter = '';
+            if (lojaFechadaBar) lojaFechadaBar.style.display = 'none';
+        } else {
+            btnFinalizar.disabled = true;
+            btnFinalizar.style.opacity = '0.4';
+            btnFinalizar.style.cursor = 'not-allowed';
+            btnFinalizar.style.filter = 'grayscale(0.5)';
+            if (lojaFechadaBar) lojaFechadaBar.style.display = 'block';
+            if (lojaFechadaProximo) {
+                lojaFechadaProximo.textContent = obterProximoHorarioAbertura();
+            }
+        }
+    }
 }
 
 console.log('✓ Trip Burger - Landing Page carregada com sucesso!');

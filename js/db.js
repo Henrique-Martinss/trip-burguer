@@ -211,21 +211,21 @@ function TB_isLogado() {
 async function TB_getConfig() {
   try {
     const snap = await firestoreDB.collection(TB_COLLECTION_CONFIG).doc('site').get();
-    return snap.exists ? snap.data() : { whatsapp: '5554981507387', mostrarAvaliacoes: true, valorSalada: 5.00 };
+    return snap.exists ? snap.data() : { whatsapp: '5554999381351', mostrarAvaliacoes: true, valorSalada: 5.00 };
   } catch (e) {
     console.error('❌ TB_getConfig erro:', e);
-    return { whatsapp: '5554981507387', mostrarAvaliacoes: true, valorSalada: 5.00 };
+    return { whatsapp: '5554999381351', mostrarAvaliacoes: true, valorSalada: 5.00 };
   }
 }
 
 function TB_listenConfig(callback) {
   return firestoreDB.collection(TB_COLLECTION_CONFIG).doc('site')
     .onSnapshot(snap => {
-      const config = snap.exists ? snap.data() : { whatsapp: '5554981507387', mostrarAvaliacoes: true, valorSalada: 5.00 };
+      const config = snap.exists ? snap.data() : { whatsapp: '5554999381351', mostrarAvaliacoes: true, valorSalada: 5.00 };
       callback(config);
     }, error => {
       console.error('❌ TB_listenConfig erro:', error);
-      callback({ whatsapp: '5554981507387', mostrarAvaliacoes: true, valorSalada: 5.00 });
+      callback({ whatsapp: '5554999381351', mostrarAvaliacoes: true, valorSalada: 5.00 });
     });
 }
 
